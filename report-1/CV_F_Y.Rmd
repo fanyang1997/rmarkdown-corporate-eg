@@ -1,0 +1,136 @@
+---
+title: "CV Fan Yang"
+author: "Fan Yang yangfancs1997@gmail.com"
+date: "9 September 2021"
+output:
+  html_document:
+    toc: yes
+    toc_depth: 3
+    toc_float: yes
+    number_sections: yes
+    self_contained: yes
+    css: corp-styles.css
+    highlight: pygments
+  word_document:
+    toc: yes
+    toc_depth: '3'
+  pdf_document:
+    toc: yes
+    toc_depth: '3'
+---
+
+<img src="logo.JPG" style="position:absolute;top:0px;right:0px;" />
+<div class="watermark">Fan Yang</div>
+
+<div class="footer">Copyright &copy; Fan Yang </div>
+
+<div id="htmlwidget-4092" style="width:75%; height:75%; position:absolute" class="leaflet html-widget"></div>
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, cache = FALSE, eval = TRUE)
+```
+# Ref
+- linkedin https://www.linkedin.cn/injobs/in/fanyang1997
+- email: yangfancs1997@gmail.com
+- stackoverflow https://stackoverflow.com/users/8809793/fan-yang
+
+# Summrary
+Outgoing and cheerful personality, good at communicating with people. Technical background, love internet, good at information retrieval analysis and data visualization. Excellent English retrieval and reading skills, love to collect and analyze data, excellent product/data sense.
+
+
+# Work Exp/Edu Exp
+- 2021.1-Now venustech Data Mining Eng
+- 2019.7-2022.1 Ericsson Network Engineer/Data Scientist
+- 2015-2019 Xi'an Shiyou University, Computer Science
+
+
+# Project/Paper/Workshop
+
+*Network Issue Classification* Sep. 2020 – Now
+
+Data Scientist/Network Engineer NDO(Network Design Optimization) AI Lab in Ericsson
+
+Background: The network nodes are filled with kpi data, which are highly correlated with the user’s perception.
+Our task is to apply machine learning algorithms to isolate the abnormal nodes in the network and classify the
+issue to improve user perception (structured data and unstructured data).
+
+- Design EDA pipeline using Python, cleaning data and visualization for analysis (pandas, numpy, matplotlib,
+seaborn)
+- For structured data, collaborate with other data scientists to design anomaly detection algorithms(auto-
+encoder) to isolate anomalous nodes
+- For unstructured data, design and implement struc2vec algorithm for anomaly detection clustering, get the
+network nodes embedding
+- Use dimension reduction (tsne), clustering algorithm (k-means) for dimension reduction and network anomaly
+node clustering, quantitatively evaluate the clustering results (silhouette coefficient)
+- Separate the kpi pattern of each class form the cluster results, use seaborn to visualization and analysi
+
+*5G feature test/analysis* Nov. 2019 – 2020
+
+Network Engineer/Data Analysis
+
+Background: Cooperate with 5G RD team to test new 5G features, use industry software to record log, clean
+and analyze log data with Python, perform visualization analysis, write test reports, give feedback to RD team
+for iteration.
+
+- Using Python pandas to clean log data, matplotlib, seaborn to visualize analysis results
+- Visualize gps and 5G signal data using falium package
+- Act as team leader to communicate and coordinate RD and testers, assign tasks
+- Write test reports, evaluate test results, and give feedback to the RD team
+
+# Skills
+- Proficiency in SQL and Python for data cleaning, analysis and visualization
+- Familiar with the common machine learning algorithms (sklearn, keras)
+- Platform and tool chain: Python, Pycharm, Jupyter, Linux, Git, SQL, Bash, good coding habits
+- Fluent in spoken and written English
+- Good logical thinking and communication skills, strong resistance to stress, good team player
+- Excellent English search and reading skills, love to collect and analyze data, excellent product/data sense
+
+# Honors and Awards
+- Top performing employee(EI) Excellent Impact Ericsson 2020
+- BMAS - Certificate of Experienced Level for Machine Learning Ericsson 2020
+
+# List of Article
+- [*neo 4j vis test*](https://www.runoob.com)
+
+
+```{r message=FALSE, warning=FALSE}
+library(plotly)
+
+data <- read.csv("gapminderDataFiveYear.csv")
+
+data_2007 <- data[which(data$year == 2007),]
+data_2007 <- data_2007[order(data_2007$continent, data_2007$country),]
+data_2007$size <- data_2007$pop
+colors <- c('#4AC6B7', '#1972A4', '#965F8A', '#FF7070', '#C61951')
+
+fig <- plot_ly(data_2007, x = ~gdpPercap, y = ~lifeExp, z = ~pop, color = ~continent, size = ~size, colors = colors,
+             marker = list(symbol = 'circle', sizemode = 'diameter'), sizes = c(5, 150),
+             text = ~paste('Country:', country, '<br>Life Expectancy:', lifeExp, '<br>GDP:', gdpPercap,
+                           '<br>Pop.:', pop))
+fig <- fig %>% layout(title = 'Life Expectancy v. Per Capita GDP, 2007',
+         scene = list(xaxis = list(title = 'GDP per capita (2000 dollars)',
+                      gridcolor = 'rgb(255, 255, 255)',
+                      range = c(2.003297660701705, 5.191505530708712),
+                      type = 'log',
+                      zerolinewidth = 1,
+                      ticklen = 5,
+                      gridwidth = 2),
+               yaxis = list(title = 'Life Expectancy (years)',
+                      gridcolor = 'rgb(255, 255, 255)',
+                      range = c(36.12621671352166, 91.72921793264332),
+                      zerolinewidth = 1,
+                      ticklen = 5,
+                      gridwith = 2),
+               zaxis = list(title = 'Population',
+                            gridcolor = 'rgb(255, 255, 255)',
+                            type = 'log',
+                            zerolinewidth = 1,
+                            ticklen = 5,
+                            gridwith = 2)),
+         paper_bgcolor = 'rgb(243, 243, 243)',
+         plot_bgcolor = 'rgb(243, 243, 243)')
+
+fig
+
+```

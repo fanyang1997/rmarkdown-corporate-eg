@@ -1,0 +1,101 @@
+---
+title: "tec"
+author: "Fan Yang"
+date: "12/29/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## R Markdown
+
+This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+
+When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+
+```{r cars}
+summary(cars)
+```
+
+## Including Plots
+
+You can also embed plots, for example:
+
+```{r pressure, echo=FALSE}
+plot(pressure)
+```
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+
+```{r}
+library(tidyquant)
+library(pedquant)
+library(plotly)
+tickers = c("^000001", "AAPL", "AMZN", "FB", "NFLX", "MSFT")
+for (i in tickers){
+  getSymbols(i,
+             from = "2018-01-01",
+             to = "2019-12-31")}
+stock <- data.frame(GOOG$GOOG.Adjusted,
+                    AAPL$AAPL.Adjusted,
+                    AMZN$AMZN.Adjusted,
+                    FB$FB.Adjusted,
+                    NFLX$NFLX.Adjusted,
+                    MSFT$MSFT.Adjusted)
+stock$GOOG.Adjusted <- stock$GOOG.Adjusted/stock$GOOG.Adjusted[1]
+stock$AAPL.Adjusted <- stock$AAPL.Adjusted/stock$AAPL.Adjusted[1]
+stock$AMZN.Adjusted <- stock$AMZN.Adjusted/stock$AMZN.Adjusted[1]
+stock$FB.Adjusted <- stock$FB.Adjusted/stock$FB.Adjusted[1]
+stock$NFLX.Adjusted <- stock$NFLX.Adjusted/stock$NFLX.Adjusted[1]
+stock$MSFT.Adjusted <- stock$MSFT.Adjusted/stock$MSFT.Adjusted[1]
+stock <- data.frame(stock,rownames(stock))
+colnames(stock) <- append(tickers,'Dates')
+
+fig <- plot_ly(stock, type = 'scatter', mode = 'lines')%>%
+  add_trace(x = ~Dates, y = ~GOOG, name = 'GOOG')%>%
+  add_trace(x = ~Dates, y = ~AAPL, name = 'AAPL')%>%
+  add_trace(x = ~Dates, y = ~AMZN, name = 'AMZN')%>%
+  add_trace(x = ~Dates, y = ~FB, name = 'FB')%>%
+  add_trace(x = ~Dates, y = ~NFLX, name = 'NFLX')%>%
+  add_trace(x = ~Dates, y = ~MSFT, name = 'MSFT')%>%
+  layout(title = 'custom tick labels with ticklabelmode="period"',legend=list(title=list(text='variable')),
+         xaxis = list(dtick = "M1", tickformat="%b\n%Y",
+                      ticklabelmode="period"), width = 1000)
+options(warn = -1)
+fig <- fig %>%
+  layout(
+         xaxis = list(zerolinecolor = '#ffff',
+                      zerolinewidth = 2,
+                      gridcolor = 'ffff'),
+         yaxis = list(zerolinecolor = '#ffff',
+                      zerolinewidth = 2,
+                      gridcolor = 'ffff'),
+         plot_bgcolor='#e5ecf6')
+
+
+fig
+
+```
+
+```{r}
+library(gapminder)
+library(ggplot2)
+ggplot(gapminder, aes(gdpPercap, lifeExp, size = pop, colour = country)) +
+  geom_point(alpha = 0.7, show.legend = FALSE) +
+  scale_colour_manual(values = country_colors) +
+  scale_size(range = c(2, 12)) +
+  scale_x_log10() +
+  facet_wrap(~continent) +
+  # Here comes the gganimate specific bits
+  labs(title = 'Year: {frame_time}', x = 'GDP per capita', y = 'life expectancy') 
+```
+```{r}
+library(tidyverse)
+library(timetk)
+library(kableExtra)
+library(highcharter)
+library(quantmod)
+```
+

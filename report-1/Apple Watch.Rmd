@@ -1,0 +1,46 @@
+---
+title: "Apple Watch可视化分析"
+author: "Fan Yang yangfancs1997@gmail.com"
+date: "9 September 2021"
+output:
+  html_document:
+    toc: yes
+    toc_depth: 3
+    toc_float: yes
+    number_sections: yes
+    self_contained: yes
+    css: corp-styles.css
+    highlight: pygments
+  word_document:
+    toc: yes
+    toc_depth: '3'
+  pdf_document:
+    toc: yes
+    toc_depth: '3'
+bibliography: reference.bib
+---
+
+<img src="logo.JPG" style="position:absolute;top:0px;right:0px;" />
+<div class="watermark">Fan Yang</div>
+
+<div class="footer">Copyright &copy; Fan Yang </div>
+<div id="htmlwidget-4092" style="width:75%; height:75%; position:absolute" class="leaflet html-widget"></div>
+
+# 值得一读的博客
+https://freemind.pluskid.org/
+# 导出数据
+
+#
+```{r}
+library("XML")
+library("methods")
+library("tidyverse")
+library("lubridate")
+```
+```{r}
+
+```
+# Reference
+- https://jeffjjohnston.github.io/rstudio/rmarkdown/2016/04/28/explore-your-apple-watch-heart-rate-data.html
+- https://www.mitchhenderson.org/2020/05/visualising-data-measured-from-activity-watches/
+1

@@ -1,20 +1,26 @@
 ---
 title: "Demonstration page of R Markdown in combination with corporate theming"
-author: "Flash Gordon, consultant economist"
+author: "Fan Yang yangfancs1997@gmail.com"
 date: "9 September 2017"
-output: 
+output:
   html_document:
-    toc: true
+    toc: yes
     toc_depth: 3
-    toc_float: true
-    number_sections: true
+    toc_float: yes
+    number_sections: yes
     self_contained: yes
     css: corp-styles.css
     highlight: pygments
+  word_document:
+    toc: yes
+    toc_depth: '3'
+  pdf_document:
+    toc: yes
+    toc_depth: '3'
 ---
 
 <img src="logo.svg" style="position:absolute;top:0px;right:0px;" />
-<div class="watermark">DRAFT</div>
+<div class="watermark">Fan Yang</div>
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = FALSE, cache = FALSE, eval = TRUE)
@@ -22,9 +28,10 @@ knitr::opts_chunk$set(echo = FALSE, cache = FALSE, eval = TRUE)
 
 # Executive Summary
 
-```{r results = 'asis'}
-cat(stri_rand_lipsum(1))
-```
+#```{r results = 'asis'}
+
+#at(stri_rand_lipsum(1))
+#```
 
 
 # Purpose
@@ -50,22 +57,7 @@ We found this data from [MBIE's website](http://www.mbie.govt.nz/info-services/s
 
 We see a very strong seasonal pattern, and also that people spend a lot on accommodation, food and beverage, and retail.
 
-```{r}
-p <- mrtes %>%
-  # make products friendly with line wraps for the facet titles:
-  mutate(Product = str_wrap(Product, 20)) %>%
-  # add up all the "others""
-  group_by(Date, Product, rto_lumped) %>%
-  summarise(Spend = sum(Spend)) %>%
-  ungroup() %>%
-  mutate(rto_lumped = fct_reorder(rto_lumped, -Spend)) %>%
-  ggplot(aes(x = Date, y = Spend, colour = rto_lumped)) +
-  facet_wrap(~Product, scales = "free_y") +
-  theme(legend.position = c(0.9, 0.1)) +
-  labs(x = "", colour = "")
 
-p + geom_line() + labs(y = "Spend ($m)")
-```
 
 
 ### Seasonally adjusted
@@ -73,30 +65,89 @@ p + geom_line() + labs(y = "Spend ($m)")
 Some of the pattern is obscured by the strongly seasonal element.  There are more tourists in summer than winter in New Zealand.  We can use statistical methods to adjust for the seasonality and focus more on the trend.  NOte the big spike in food and beverage sales in Auckland in particular at the time of the 2011 Rugby World Cup.  Also not challenges with seasonal adjustment of accommodation spend in Auckland.  We could consider using more sophisticated methods to understand what is going on here.
 
 
-```{r}
-p +   stat_stl(frequency = 12, s.window = 7) +
-  labs(y = "Seasonall adjusted spend ($m)")
 
-```
 
 
 ### Food and Bev versus accommodation
 
 We get some interesting patterns if we compare the percentage of total tourism spend on accommodation compared to food and beverage.  The sking location of Ruapehu stands out as having much more spend on accommodation and relatively little on food and beverage.  However, this may reflect the data collection process - if food and beverages are purchased from tourist's hotels, it will show up as accommodation:
 
+
 ```{r}
-mrtes %>%
-  group_by(rto_short, Product) %>%
-  summarise(total_spend = sum(Spend)) %>%
-  group_by(rto_short) %>%
-  mutate(prop_spend = total_spend / sum(total_spend)) %>%
-  filter(Product %in% c("Accommodation services", "Food and beverage serving services")) %>%
-  select(-total_spend) %>%
-  spread(Product, prop_spend) %>%
-  ggplot(aes(x = `Accommodation services`, y = `Food and beverage serving services`,
-                    label = rto_short)) +
-  geom_text() +
-  scale_x_continuous(label = percent) +
-  scale_y_continuous(label = percent)
+library(plotly)
+
+data <- read.csv("gapminderDataFiveYear.csv")
+
+data_2007 <- data[which(data$year == 2007),]
+data_2007 <- data_2007[order(data_2007$continent, data_2007$country),]
+slope <- 2.666051223553066e-05
+data_2007$size <- sqrt(data_2007$pop * slope)
+colors <- c('#4AC6B7', '#1972A4', '#965F8A', '#FF7070', '#C61951')
+
+fig <- plot_ly(data_2007, x = ~gdpPercap, y = ~lifeExp, color = ~continent, size = ~size, colors = colors,
+        type = 'scatter', mode = 'markers', sizes = c(min(data_2007$size), max(data_2007$size)),
+        marker = list(symbol = 'circle', sizemode = 'diameter',
+                      line = list(width = 2, color = '#FFFFFF')),
+        text = ~paste('Country:', country, '<br>Life Expectancy:', lifeExp, '<br>GDP:', gdpPercap,
+                      '<br>Pop.:', pop))
+fig <- fig %>% layout(title = 'Life Expectancy v. Per Capita GDP, 2007',
+         xaxis = list(title = 'GDP per capita (2000 dollars)',
+                      gridcolor = 'rgb(255, 255, 255)',
+                      range = c(2.003297660701705, 5.191505530708712),
+                      type = 'log',
+                      zerolinewidth = 1,
+                      ticklen = 5,
+                      gridwidth = 2),
+         yaxis = list(title = 'Life Expectancy (years)',
+                      gridcolor = 'rgb(255, 255, 255)',
+                      range = c(36.12621671352166, 91.72921793264332),
+                      zerolinewidth = 1,
+                      ticklen = 5,
+                      gridwith = 2),
+         paper_bgcolor = 'rgb(243, 243, 243)',
+         plot_bgcolor = 'rgb(243, 243, 243)')
+
+fig
 
 ```
+```{r}
+library(plotly)
+
+data <- read.csv("gapminderDataFiveYear.csv")
+
+data_2007 <- data[which(data$year == 2007),]
+data_2007 <- data_2007[order(data_2007$continent, data_2007$country),]
+data_2007$size <- data_2007$pop
+colors <- c('#4AC6B7', '#1972A4', '#965F8A', '#FF7070', '#C61951')
+
+fig <- plot_ly(data_2007, x = ~gdpPercap, y = ~lifeExp, z = ~pop, color = ~continent, size = ~size, colors = colors,
+             marker = list(symbol = 'circle', sizemode = 'diameter'), sizes = c(5, 150),
+             text = ~paste('Country:', country, '<br>Life Expectancy:', lifeExp, '<br>GDP:', gdpPercap,
+                           '<br>Pop.:', pop))
+fig <- fig %>% layout(title = 'Life Expectancy v. Per Capita GDP, 2007',
+         scene = list(xaxis = list(title = 'GDP per capita (2000 dollars)',
+                      gridcolor = 'rgb(255, 255, 255)',
+                      range = c(2.003297660701705, 5.191505530708712),
+                      type = 'log',
+                      zerolinewidth = 1,
+                      ticklen = 5,
+                      gridwidth = 2),
+               yaxis = list(title = 'Life Expectancy (years)',
+                      gridcolor = 'rgb(255, 255, 255)',
+                      range = c(36.12621671352166, 91.72921793264332),
+                      zerolinewidth = 1,
+                      ticklen = 5,
+                      gridwith = 2),
+               zaxis = list(title = 'Population',
+                            gridcolor = 'rgb(255, 255, 255)',
+                            type = 'log',
+                            zerolinewidth = 1,
+                            ticklen = 5,
+                            gridwith = 2)),
+         paper_bgcolor = 'rgb(243, 243, 243)',
+         plot_bgcolor = 'rgb(243, 243, 243)')
+
+fig
+
+```
+

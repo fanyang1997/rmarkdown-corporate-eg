@@ -1,0 +1,58 @@
+---
+title: "tec 2"
+author: "Fan Yang yangfancs1997@gmail.com"
+date: "9 September 2021"
+output:
+  html_document:
+    toc: yes
+    toc_depth: 3
+    toc_float: yes
+    number_sections: yes
+    self_contained: yes
+    css: corp-styles.css
+    highlight: pygments
+  word_document:
+    toc: yes
+    toc_depth: '3'
+  pdf_document:
+    toc: yes
+    toc_depth: '3'
+---
+
+<img src="logo.JPG" style="position:absolute;top:0px;right:0px;" />
+<div class="watermark">Fan Yang</div>
+
+<div class="footer">Copyright &copy; Fan Yang </div>
+
+
+#```{r setup, include=FALSE}
+#knitr::opts_chunk$set(echo = FALSE, cache = FALSE, eval = TRUE)
+#```
+
+# R Markdown
+
+This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+
+When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+
+```{bash}
+# TMUX
+if which tmux >/dev/null 2>&1; then
+    # if no session is started, start a new session
+    test -z ${TMUX} && tmux
+
+    # when quitting tmux, try to attach
+    while test -z ${TMUX}; do
+        tmux attach || break
+    done
+fi
+```
+https://gganimate.com/
+```{python}
+print('test')
+```
+> 试试我的 pedquant 包吧，对国内的股票、期货、宏观经济数据更有优势。而且可以给我直接提需求。
+
+https://d.cosx.org/d/422062-quantmodgetsymbols
+
+xieshichen
